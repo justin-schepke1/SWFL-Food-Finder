@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SWFL Food Finder</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Southwest Florida</p>
+        <h1>Food Finder</h1>
+      </div>
+      <button id="notifyBtn" class="ghost">Notifications <span id="notificationCount">2</span></button>
+    </header>
+
+    <main>
+      <section class="card" id="authCard">
+        <h2>Login / Sign up</h2>
+        <p>Low-friction access with email now, social login ready.</p>
+        <form id="authForm" class="stack">
+          <label>Email<input type="email" id="email" placeholder="you@example.com" required /></label>
+          <label>Password<input type="password" id="password" placeholder="••••••••" required /></label>
+          <button type="submit">Continue</button>
+        </form>
+        <div class="row">
+          <button class="ghost">Continue with Google</button>
+          <button class="ghost">Continue with Apple</button>
+        </div>
+      </section>
+
+      <section class="card" id="onboardingCard">
+        <h2>Preference Setup</h2>
+        <p>Tell us your taste so recommendations feel personal from day one.</p>
+        <div class="chip-group" id="cuisineChoices"></div>
+        <div class="split">
+          <label>Budget
+            <select id="budget">
+              <option>$</option>
+              <option selected>$$</option>
+              <option>$$$</option>
+            </select>
+          </label>
+          <label>Distance
+            <select id="distance">
+              <option>5 mi</option>
+              <option selected>10 mi</option>
+              <option>20 mi</option>
+            </select>
+          </label>
+        </div>
+        <div class="chip-group" id="dietChoices"></div>
+        <div class="chip-group" id="vibeChoices"></div>
+      </section>
+
+      <section class="card" id="homeCard">
+        <div class="row-between">
+          <h2>Home · Personalized picks</h2>
+          <button id="refreshRecs" class="ghost">Refresh</button>
+        </div>
+        <p class="subtle">We prioritize SWFL local + independent spots, then score by your profile.</p>
+        <div id="recommendations" class="restaurant-grid"></div>
+      </section>
+
+      <section class="card" id="discoveryCard">
+        <h2>Restaurant Discovery</h2>
+        <div class="split">
+          <label>City
+            <select id="cityFilter">
+              <option value="">All</option>
+            </select>
+          </label>
+          <label>Cuisine
+            <select id="cuisineFilter">
+              <option value="">All</option>
+            </select>
+          </label>
+        </div>
+        <input id="contextFilter" placeholder="Search context (date night, family...)" />
+        <div id="discoveryList" class="restaurant-grid"></div>
+      </section>
+
+      <section class="card" id="detailsCard">
+        <h2>Restaurant Details</h2>
+        <article id="restaurantDetails" class="details"></article>
+      </section>
+
+      <section class="card" id="savedCard">
+        <h2>Favorites / Want to Try</h2>
+        <div class="split-two">
+          <div>
+            <h3>Favorites</h3>
+            <ul id="favoritesList"></ul>
+          </div>
+          <div>
+            <h3>Want to Try</h3>
+            <ul id="wantList"></ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" id="profileCard">
+        <h2>Profile / Preferences</h2>
+        <p id="profileSummary"></p>
+        <p class="subtle">Recommendations adapt based on saved activity and location-aware scoring.</p>
+      </section>
+    </main>
+
+    <nav class="bottom-nav">
+      <button data-target="homeCard" class="active">Home</button>
+      <button data-target="discoveryCard">Discover</button>
+      <button data-target="savedCard">Saved</button>
+      <button data-target="profileCard">Profile</button>
+    </nav>
+
+    <script src="app.js"></script>
+  </body>
+</html>
