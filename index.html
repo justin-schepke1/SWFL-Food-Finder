@@ -2,117 +2,350 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0d5c63" />
+    <meta name="description" content="Find the best local restaurants in Southwest Florida personalized to your taste." />
     <title>SWFL Food Finder</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <header class="topbar">
-      <div>
-        <p class="eyebrow">Southwest Florida</p>
-        <h1>Food Finder</h1>
+
+    <!-- ── SPLASH / ONBOARDING ─────────────────────────────── -->
+    <div id="onboardingScreen" class="screen onboarding-screen active">
+      <div class="ob-hero">
+        <div class="ob-logo">
+          <span class="ob-logo-icon">🌴</span>
+          <span class="ob-logo-text">SWFL<strong>Food</strong></span>
+        </div>
+        <h1 class="ob-headline">Your personal guide to Southwest Florida dining</h1>
+        <p class="ob-sub">Tell us your taste once — get recommendations that feel handpicked every time.</p>
       </div>
-      <button id="notifyBtn" class="ghost">Notifications <span id="notificationCount">2</span></button>
-    </header>
 
-    <main>
-      <section class="card" id="authCard">
-        <h2>Login / Sign up</h2>
-        <p>Low-friction access with email now, social login ready.</p>
-        <form id="authForm" class="stack">
-          <label>Email<input type="email" id="email" placeholder="you@example.com" required /></label>
-          <label>Password<input type="password" id="password" placeholder="••••••••" required /></label>
-          <button type="submit">Continue</button>
-        </form>
-        <div class="row">
-          <button class="ghost">Continue with Google</button>
-          <button class="ghost">Continue with Apple</button>
+      <div class="ob-steps">
+        <!-- Step 0: Welcome -->
+        <div class="ob-step active" data-step="0">
+          <button class="btn-primary btn-lg" id="startOnboarding">Get Started</button>
+          <button class="btn-ghost" id="skipOnboarding">Skip — browse everything</button>
         </div>
-      </section>
 
-      <section class="card" id="onboardingCard">
-        <h2>Preference Setup</h2>
-        <p>Tell us your taste so recommendations feel personal from day one.</p>
-        <div class="chip-group" id="cuisineChoices"></div>
-        <div class="split">
-          <label>Budget
-            <select id="budget">
-              <option>$</option>
-              <option selected>$$</option>
-              <option>$$$</option>
-            </select>
-          </label>
-          <label>Distance
-            <select id="distance">
-              <option>5 mi</option>
-              <option selected>10 mi</option>
-              <option>20 mi</option>
-            </select>
-          </label>
+        <!-- Step 1: Cuisine -->
+        <div class="ob-step" data-step="1">
+          <p class="ob-label">What cuisines do you love? <span class="ob-hint">Pick any</span></p>
+          <div class="chip-grid" id="ob-cuisine"></div>
+          <button class="btn-primary" id="ob-next-1">Next →</button>
         </div>
-        <div class="chip-group" id="dietChoices"></div>
-        <div class="chip-group" id="vibeChoices"></div>
-      </section>
 
-      <section class="card" id="homeCard">
-        <div class="row-between">
-          <h2>Home · Personalized picks</h2>
-          <button id="refreshRecs" class="ghost">Refresh</button>
-        </div>
-        <p class="subtle">We prioritize SWFL local + independent spots, then score by your profile.</p>
-        <div id="recommendations" class="restaurant-grid"></div>
-      </section>
-
-      <section class="card" id="discoveryCard">
-        <h2>Restaurant Discovery</h2>
-        <div class="split">
-          <label>City
-            <select id="cityFilter">
-              <option value="">All</option>
-            </select>
-          </label>
-          <label>Cuisine
-            <select id="cuisineFilter">
-              <option value="">All</option>
-            </select>
-          </label>
-        </div>
-        <input id="contextFilter" placeholder="Search context (date night, family...)" />
-        <div id="discoveryList" class="restaurant-grid"></div>
-      </section>
-
-      <section class="card" id="detailsCard">
-        <h2>Restaurant Details</h2>
-        <article id="restaurantDetails" class="details"></article>
-      </section>
-
-      <section class="card" id="savedCard">
-        <h2>Favorites / Want to Try</h2>
-        <div class="split-two">
-          <div>
-            <h3>Favorites</h3>
-            <ul id="favoritesList"></ul>
+        <!-- Step 2: Budget + Distance -->
+        <div class="ob-step" data-step="2">
+          <p class="ob-label">Budget & how far will you travel?</p>
+          <div class="ob-row">
+            <div class="seg-group" id="ob-budget">
+              <button class="seg active" data-val="$">$</button>
+              <button class="seg active" data-val="$$">$$</button>
+              <button class="seg" data-val="$$$">$$$</button>
+              <button class="seg" data-val="$$$$">$$$$</button>
+            </div>
           </div>
+          <div class="ob-row">
+            <div class="seg-group" id="ob-distance">
+              <button class="seg" data-val="5">5 mi</button>
+              <button class="seg active" data-val="15">15 mi</button>
+              <button class="seg active" data-val="30">30 mi</button>
+              <button class="seg active" data-val="50">50 mi</button>
+            </div>
+          </div>
+          <button class="btn-primary" id="ob-next-2">Next →</button>
+        </div>
+
+        <!-- Step 3: Dietary -->
+        <div class="ob-step" data-step="3">
+          <p class="ob-label">Any dietary preferences? <span class="ob-hint">Optional</span></p>
+          <div class="chip-grid" id="ob-diet"></div>
+          <button class="btn-primary" id="ob-next-3">Next →</button>
+        </div>
+
+        <!-- Step 4: Dining Vibe -->
+        <div class="ob-step" data-step="4">
+          <p class="ob-label">What's your usual dining vibe? <span class="ob-hint">Pick any</span></p>
+          <div class="chip-grid" id="ob-vibe"></div>
+          <button class="btn-primary" id="ob-finish">Find My Restaurants 🎉</button>
+        </div>
+      </div>
+
+      <!-- Step progress dots -->
+      <div class="ob-dots" id="ob-dots">
+        <span class="ob-dot active" data-s="1"></span>
+        <span class="ob-dot" data-s="2"></span>
+        <span class="ob-dot" data-s="3"></span>
+        <span class="ob-dot" data-s="4"></span>
+      </div>
+    </div>
+
+    <!-- ── MAIN APP ─────────────────────────────────────────── -->
+    <div id="appScreen" class="screen app-screen">
+
+      <!-- Top bar -->
+      <header class="topbar">
+        <div class="topbar-brand">
+          <span class="topbar-icon">🌴</span>
           <div>
-            <h3>Want to Try</h3>
-            <ul id="wantList"></ul>
+            <p class="eyebrow">Southwest Florida</p>
+            <h1 class="topbar-title">Food Finder</h1>
           </div>
         </div>
-      </section>
+        <div class="topbar-actions">
+          <button class="icon-btn" id="notifyBtn" aria-label="Notifications">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="badge" id="notifBadge">2</span>
+          </button>
+          <button class="icon-btn" id="searchToggleBtn" aria-label="Search">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </button>
+        </div>
+      </header>
 
-      <section class="card" id="profileCard">
-        <h2>Profile / Preferences</h2>
-        <p id="profileSummary"></p>
-        <p class="subtle">Recommendations adapt based on saved activity and location-aware scoring.</p>
-      </section>
-    </main>
+      <!-- Global search bar (hidden by default) -->
+      <div class="global-search" id="globalSearch">
+        <input id="globalSearchInput" type="search" placeholder="Search restaurants, cuisines, cities…" autocomplete="off" />
+        <div id="searchResults" class="search-dropdown"></div>
+      </div>
 
-    <nav class="bottom-nav">
-      <button data-target="homeCard" class="active">Home</button>
-      <button data-target="discoveryCard">Discover</button>
-      <button data-target="savedCard">Saved</button>
-      <button data-target="profileCard">Profile</button>
-    </nav>
+      <!-- Pages -->
+      <main id="mainContent">
+
+        <!-- HOME PAGE -->
+        <div class="page active" id="page-home">
+          <!-- Greeting -->
+          <div class="home-greeting">
+            <div>
+              <p class="eyebrow" id="greetingTime">Good morning</p>
+              <h2 class="page-title">Your picks today</h2>
+            </div>
+            <button class="btn-ghost btn-sm" id="refreshRecs">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+              Refresh
+            </button>
+          </div>
+
+          <!-- Quick filters -->
+          <div class="quick-filters">
+            <button class="qf-btn active" data-vibe="">All</button>
+            <button class="qf-btn" data-vibe="Waterfront">🌊 Waterfront</button>
+            <button class="qf-btn" data-vibe="Date Night">🕯️ Date Night</button>
+            <button class="qf-btn" data-vibe="Family">👨‍👩‍👧 Family</button>
+            <button class="qf-btn" data-vibe="Quick Bite">⚡ Quick Bite</button>
+            <button class="qf-btn" data-vibe="Casual">😎 Casual</button>
+            <button class="qf-btn" data-vibe="Brunch">🥂 Brunch</button>
+            <button class="qf-btn" data-vibe="Outdoor">🌿 Outdoor</button>
+          </div>
+
+          <!-- Top picks (horizontal scroll) -->
+          <div class="section-header">
+            <h3 class="section-title">Top Picks For You</h3>
+            <span class="section-sub">Scored by your profile</span>
+          </div>
+          <div class="horizontal-scroll" id="topPicks"></div>
+
+          <!-- Open now section -->
+          <div class="section-header">
+            <h3 class="section-title">Hidden Gems</h3>
+            <span class="section-sub">Independent & local</span>
+          </div>
+          <div class="vertical-list" id="hiddenGems"></div>
+
+          <!-- All recommendations -->
+          <div class="section-header">
+            <h3 class="section-title">More Near You</h3>
+            <span class="section-sub" id="recCount"></span>
+          </div>
+          <div class="vertical-list" id="allRecs"></div>
+        </div>
+
+        <!-- DISCOVER PAGE -->
+        <div class="page" id="page-discover">
+          <h2 class="page-title">Discover</h2>
+
+          <!-- Filter bar -->
+          <div class="filter-bar">
+            <div class="filter-row">
+              <div class="filter-field">
+                <label class="filter-label">City</label>
+                <select id="cityFilter" class="filter-select">
+                  <option value="">All Cities</option>
+                </select>
+              </div>
+              <div class="filter-field">
+                <label class="filter-label">Cuisine</label>
+                <select id="cuisineFilter" class="filter-select">
+                  <option value="">All Cuisines</option>
+                </select>
+              </div>
+            </div>
+            <div class="filter-row">
+              <div class="filter-field">
+                <label class="filter-label">Price</label>
+                <select id="priceFilter" class="filter-select">
+                  <option value="">Any Price</option>
+                  <option value="$">$ — Budget</option>
+                  <option value="$$">$$ — Moderate</option>
+                  <option value="$$$">$$$ — Upscale</option>
+                  <option value="$$$$">$$$$ — Fine Dining</option>
+                </select>
+              </div>
+              <div class="filter-field">
+                <label class="filter-label">Vibe</label>
+                <select id="vibeFilter" class="filter-select">
+                  <option value="">Any Vibe</option>
+                </select>
+              </div>
+            </div>
+            <div class="filter-chips" id="dietFilterChips"></div>
+            <div class="filter-results-count" id="filterCount"></div>
+          </div>
+
+          <div class="vertical-list" id="discoveryList"></div>
+        </div>
+
+        <!-- SAVED PAGE -->
+        <div class="page" id="page-saved">
+          <h2 class="page-title">Saved</h2>
+          <div class="tabs">
+            <button class="tab active" data-tab="favorites">❤️ Favorites</button>
+            <button class="tab" data-tab="wantToTry">🔖 Want to Try</button>
+          </div>
+          <div class="tab-pane active" id="tab-favorites">
+            <div class="vertical-list" id="favoritesList"></div>
+            <p class="empty-state" id="favEmpty">No favorites yet — heart a restaurant to save it here.</p>
+          </div>
+          <div class="tab-pane" id="tab-wantToTry">
+            <div class="vertical-list" id="wantList"></div>
+            <p class="empty-state" id="wantEmpty">Nothing saved yet — bookmark spots you want to visit.</p>
+          </div>
+        </div>
+
+        <!-- PROFILE PAGE -->
+        <div class="page" id="page-profile">
+          <h2 class="page-title">My Profile</h2>
+
+          <div class="profile-card">
+            <div class="profile-avatar" id="profileAvatar">🍽️</div>
+            <div>
+              <p class="profile-name" id="profileName">Food Explorer</p>
+              <p class="profile-stats" id="profileStats"></p>
+            </div>
+          </div>
+
+          <div class="pref-section">
+            <div class="pref-section-header">
+              <h3>Favorite Cuisines</h3>
+              <span class="pref-hint">Tap to toggle</span>
+            </div>
+            <div class="chip-grid" id="prefCuisine"></div>
+          </div>
+
+          <div class="pref-section">
+            <div class="pref-section-header">
+              <h3>Budget</h3>
+            </div>
+            <div class="seg-group" id="prefBudget"></div>
+          </div>
+
+          <div class="pref-section">
+            <div class="pref-section-header">
+              <h3>Max Distance</h3>
+            </div>
+            <div class="seg-group" id="prefDistance"></div>
+          </div>
+
+          <div class="pref-section">
+            <div class="pref-section-header">
+              <h3>Dietary Needs</h3>
+            </div>
+            <div class="chip-grid" id="prefDiet"></div>
+          </div>
+
+          <div class="pref-section">
+            <div class="pref-section-header">
+              <h3>Dining Vibes</h3>
+            </div>
+            <div class="chip-grid" id="prefVibe"></div>
+          </div>
+
+          <button class="btn-outline btn-block" id="resetPrefs">Reset Preferences</button>
+          <button class="btn-outline btn-block" id="reRunOnboarding">Re-run Setup Wizard</button>
+        </div>
+
+      </main>
+
+      <!-- Bottom nav -->
+      <nav class="bottom-nav" role="navigation">
+        <button class="nav-btn active" data-page="home">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>Home</span>
+        </button>
+        <button class="nav-btn" data-page="discover">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <span>Discover</span>
+        </button>
+        <button class="nav-btn" data-page="saved">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          <span>Saved</span>
+        </button>
+        <button class="nav-btn" data-page="profile">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>Profile</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- ── RESTAURANT DETAIL MODAL ─────────────────────────── -->
+    <div class="modal-overlay" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="modalName">
+      <div class="modal-sheet">
+        <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+        <img class="modal-img" id="modalImg" src="" alt="" />
+        <div class="modal-body">
+          <div class="modal-header">
+            <div>
+              <h2 class="modal-name" id="modalName"></h2>
+              <p class="modal-meta" id="modalMeta"></p>
+            </div>
+            <div class="modal-rating" id="modalRating"></div>
+          </div>
+          <div class="modal-badges" id="modalBadges"></div>
+          <div class="modal-section">
+            <h4>Menu Highlights</h4>
+            <p id="modalMenu"></p>
+          </div>
+          <div class="modal-section">
+            <h4>Hours</h4>
+            <p id="modalHours"></p>
+          </div>
+          <div class="modal-section">
+            <h4>Address</h4>
+            <p id="modalAddress"></p>
+          </div>
+          <div class="modal-section">
+            <h4>Phone</h4>
+            <p id="modalPhone"></p>
+          </div>
+          <div class="modal-section" id="modalWebsiteSection">
+            <h4>Website</h4>
+            <a id="modalWebsite" href="#" target="_blank" rel="noreferrer"></a>
+          </div>
+          <div class="modal-actions">
+            <a class="btn-primary" id="modalMaps" href="#" target="_blank" rel="noreferrer">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Directions
+            </a>
+            <button class="btn-outline" id="modalFav">❤️ Favorite</button>
+            <button class="btn-outline" id="modalWant">🔖 Want to Try</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── NOTIFICATION TOAST ──────────────────────────────── -->
+    <div class="toast" id="toast"></div>
 
     <script src="app.js"></script>
   </body>
